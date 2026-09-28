@@ -13,6 +13,7 @@ import {
   Info,
 } from "lucide-react";
 import AdPlaceholder from "./AdPlaceholder";
+import { ADS_ENABLED } from "@/lib/ads";
 
 type Mode = "wake" | "now";
 
@@ -308,13 +309,15 @@ export default function SleepCalculator() {
           </div>
 
           {/* Ad bottom */}
-          <div className="mt-8">
-            <AdPlaceholder
-              id="ad-bottom"
-              label="Reklam Alanı — Alt Banner"
-              className="h-24 md:h-28"
-            />
-          </div>
+          {ADS_ENABLED && (
+            <div className="mt-8">
+              <AdPlaceholder
+                id="ad-bottom"
+                label="Reklam Alanı — Alt Banner"
+                className="h-24 md:h-28"
+              />
+            </div>
+          )}
 
           {/* Info */}
           <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.02] p-5 text-sm text-slate-400">

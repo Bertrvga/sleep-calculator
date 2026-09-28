@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Footer from "@/components/Footer";
 import AdPlaceholder from "@/components/AdPlaceholder";
+import { ADS_ENABLED } from "@/lib/ads";
 
 export const metadata: Metadata = {
   title: {
@@ -58,36 +59,46 @@ export default function RootLayout({
           />
 
           {/* Top banner ad */}
-          <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-4">
-            <AdPlaceholder id="ad-top" label="Reklam Alanı — Üst Banner" className="h-24 md:h-28" />
-          </div>
+          {ADS_ENABLED && (
+            <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-4">
+              <AdPlaceholder id="ad-top" label="Reklam Alanı — Üst Banner" className="h-24 md:h-28" />
+            </div>
+          )}
 
-          {/* Main layout with side ads on desktop */}
-          <div className="relative z-10 mx-auto flex w-full max-w-[1400px] gap-4 px-4">
+          {/* Main layout with side ads on desktop (centered, narrower when ads are off) */}
+          <div
+            className={`relative z-10 mx-auto flex w-full gap-4 px-4 ${
+              ADS_ENABLED ? "max-w-[1400px]" : "max-w-5xl"
+            }`}
+          >
             {/* Left side ad (desktop only) */}
-            <aside className="hidden xl:block w-40 shrink-0 py-6">
-              <div className="sticky top-6">
-                <AdPlaceholder
-                  id="ad-left"
-                  label="Sol Reklam"
-                  className="h-[600px]"
-                />
-              </div>
-            </aside>
+            {ADS_ENABLED && (
+              <aside className="hidden xl:block w-40 shrink-0 py-6">
+                <div className="sticky top-6">
+                  <AdPlaceholder
+                    id="ad-left"
+                    label="Sol Reklam"
+                    className="h-[600px]"
+                  />
+                </div>
+              </aside>
+            )}
 
             {/* Main content */}
             <main className="min-w-0 flex-1">{children}</main>
 
             {/* Right side ad (desktop only) */}
-            <aside className="hidden xl:block w-40 shrink-0 py-6">
-              <div className="sticky top-6">
-                <AdPlaceholder
-                  id="ad-right"
-                  label="Sağ Reklam"
-                  className="h-[600px]"
-                />
-              </div>
-            </aside>
+            {ADS_ENABLED && (
+              <aside className="hidden xl:block w-40 shrink-0 py-6">
+                <div className="sticky top-6">
+                  <AdPlaceholder
+                    id="ad-right"
+                    label="Sağ Reklam"
+                    className="h-[600px]"
+                  />
+                </div>
+              </aside>
+            )}
           </div>
 
           <Footer />

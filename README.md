@@ -8,7 +8,7 @@ Next.js (App Router) + Tailwind CSS + lucide-react ile geliştirilmiş, modern, 
 - **Şimdi yatıyorum**: Anlık saati baz alarak önerilen uyanma saatlerini gösterir.
 - **Gelişmiş ayarlar (akordiyon)**: Uykuya dalma süresini (10 / 15 / 20 / 30 dk) özelleştirin.
 - **Kurumsal sayfalar**: `/privacy`, `/terms`, `/contact` — AdSense uyumlu.
-- **Reklam placeholder'ları**: `#ad-top`, `#ad-bottom`, `#ad-left`, `#ad-right`.
+- **Reklam placeholder'ları**: `#ad-top`, `#ad-bottom`, `#ad-left`, `#ad-right`. Varsayılan olarak kapalıdır; açmak için `.env.local` dosyasına `NEXT_PUBLIC_ADS_ENABLED=true` ekleyin (bkz. `lib/ads.ts`).
 - **SEO**: metadata, `robots.ts`, `sitemap.ts`.
 
 ## Çalıştırma

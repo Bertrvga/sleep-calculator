@@ -1,4 +1,5 @@
 import { Megaphone } from "lucide-react";
+import { ADS_ENABLED } from "@/lib/ads";
 
 type Props = {
   id: string;
@@ -11,6 +12,8 @@ export default function AdPlaceholder({
   label = "Reklam Alanı",
   className = "",
 }: Props) {
+  if (!ADS_ENABLED) return null;
+
   return (
     <div
       id={id}
