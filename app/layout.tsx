@@ -35,6 +35,9 @@ export const metadata: Metadata = {
       "İdeal yatma ve uyanma saatlerini uyku döngülerine göre hesaplayın.",
   },
   robots: { index: true, follow: true },
+  verification: {
+    google: "6ob9Wnl0wTXlnheUKicwsJKsX6t0_OxVu1bs7uZeOuc",
+  },
 };
 
 export const viewport: Viewport = {
