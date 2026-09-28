@@ -3,6 +3,7 @@ import "./globals.css";
 import Footer from "@/components/Footer";
 import AdPlaceholder from "@/components/AdPlaceholder";
 import { ADS_ENABLED } from "@/lib/ads";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: {
@@ -103,6 +104,7 @@ export default function RootLayout({
 
           <Footer />
         </div>
+        <Analytics />
       </body>
     </html>
   );
