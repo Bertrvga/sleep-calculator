@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Footer from "@/components/Footer";
 import AdPlaceholder from "@/components/AdPlaceholder";
@@ -106,6 +107,7 @@ export default function RootLayout({
 
           <Footer />
         </div>
+        <Analytics />
       </body>
     </html>
   );
