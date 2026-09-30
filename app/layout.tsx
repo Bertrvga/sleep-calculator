@@ -5,7 +5,21 @@ import Footer from "@/components/Footer";
 import AdPlaceholder from "@/components/AdPlaceholder";
 import { ADS_ENABLED } from "@/lib/ads";
 
+const SITE_URL = "https://uykusaati.vercel.app";
+const SITE_NAME = "Uyku Hesaplayıcı";
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE_NAME,
+  alternateName: ["Uyku Saati", "Uyku Saati Hesaplayıcı"],
+  url: `${SITE_URL}/`,
+  inLanguage: "tr-TR",
+};
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  applicationName: SITE_NAME,
   title: {
     default: "Uyku Hesaplayıcı — İdeal Yatma ve Uyanma Saatleri",
     template: "%s | Uyku Hesaplayıcı",
@@ -28,6 +42,8 @@ export const metadata: Metadata = {
       "90 dakikalık uyku döngülerine göre ideal yatma ve uyanma saatlerini hesaplayın.",
     type: "website",
     locale: "tr_TR",
+    url: "/",
+    siteName: SITE_NAME,
   },
   twitter: {
     card: "summary_large_image",
@@ -55,6 +71,10 @@ export default function RootLayout({
   return (
     <html lang="tr" className="dark">
       <body className="min-h-screen bg-night-gradient text-slate-100">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
         <div className="relative min-h-screen overflow-hidden">
           {/* Decorative stars background */}
           <div
