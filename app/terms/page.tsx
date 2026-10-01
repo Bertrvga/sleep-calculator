@@ -4,6 +4,7 @@ import { ArrowLeft, FileText } from "lucide-react";
 import LegalArticle from "@/components/LegalArticle";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/terms" },
   title: "Kullanım Şartları",
   description:
     "Uyku Hesaplayıcı hizmetinin kullanım şartları, sorumluluk reddi ve fikri mülkiyet bildirimleri.",

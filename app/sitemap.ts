@@ -1,12 +1,25 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/site";
+
+type Route = {
+  path: string;
+  changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"];
+  priority: number;
+};
+
+const routes: Route[] = [
+  { path: "/", changeFrequency: "weekly", priority: 1 },
+  { path: "/privacy", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/terms", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/contact", changeFrequency: "yearly", priority: 0.4 },
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = "https://uykusaati.vercel.app";
-  const now = new Date();
-  return [
-    { url: `${base}/`, lastModified: now, changeFrequency: "weekly", priority: 1 },
-    { url: `${base}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${base}/terms`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${base}/contact`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
-  ];
+  const lastModified = new Date();
+  return routes.map(({ path, changeFrequency, priority }) => ({
+    url: new URL(path, SITE_URL).toString(),
+    lastModified,
+    changeFrequency,
+    priority,
+  }));
 }

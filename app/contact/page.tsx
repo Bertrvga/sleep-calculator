@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, Mail, MessageSquare, Clock } from "lucide-react";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/contact" },
   title: "İletişim",
   description:
     "Uyku Hesaplayıcı ile iletişime geçin: geri bildirim, reklam ve iş birliği talepleri.",

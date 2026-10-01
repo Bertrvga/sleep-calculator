@@ -4,9 +4,7 @@ import "./globals.css";
 import Footer from "@/components/Footer";
 import AdPlaceholder from "@/components/AdPlaceholder";
 import { ADS_ENABLED } from "@/lib/ads";
-
-const SITE_URL = "https://uykusaati.vercel.app";
-const SITE_NAME = "Uyku Hesaplayıcı";
+import { SITE_URL, SITE_NAME } from "@/lib/site";
 
 const websiteJsonLd = {
   "@context": "https://schema.org",

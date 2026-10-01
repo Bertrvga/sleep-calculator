@@ -4,6 +4,7 @@ import { ArrowLeft, ShieldCheck } from "lucide-react";
 import LegalArticle from "@/components/LegalArticle";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/privacy" },
   title: "Gizlilik Politikası",
   description:
     "Uyku Hesaplayıcı gizlilik politikası: hangi verileri topluyoruz, çerezler, üçüncü taraf reklamcılar ve haklarınız.",
