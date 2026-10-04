@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import {
-  ArrowRight,
   BedDouble,
   CalendarDays,
   CheckCircle2,
@@ -14,6 +12,7 @@ import {
   Target,
   TrendingDown,
 } from "lucide-react";
+import ToolLinkCard from "./ToolLinkCard";
 
 type InputMode = "average" | "daily";
 type Risk = "none" | "low" | "medium" | "high" | "oversleep";
@@ -350,20 +349,12 @@ export default function SleepDebtCalculator() {
           </article>
         </div>
 
-        <Link
+        <ToolLinkCard
           href="/"
-          className="glass-card bg-card-gradient group mt-6 flex items-center justify-between gap-4 p-5 transition hover:-translate-y-0.5 hover:border-moon-500/40 hover:shadow-glow sm:p-6"
-        >
-          <div className="flex items-center gap-4">
-            <div className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-r from-moon-600 to-star-500 shadow-glow">
-              <AlarmClock className="h-5 w-5 text-white" />
-            </div>
-            <span className="font-semibold text-white sm:text-lg">
-              Bu gece ideal saatte uyanmak için hesaplama yap
-            </span>
-          </div>
-          <ArrowRight className="h-5 w-5 shrink-0 text-moon-400 transition group-hover:translate-x-1 group-hover:text-white" />
-        </Link>
+          label="Bu gece ideal saatte uyanmak için hesaplama yap"
+          icon={AlarmClock}
+          className="mt-6"
+        />
 
         <p className="mt-6 text-xs text-slate-500">
           Telafi planı, günde en fazla {MAX_EXTRA_MIN_PER_DAY} dakika ekstra

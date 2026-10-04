@@ -10,6 +10,7 @@ type Route = {
 const routes: Route[] = [
   { path: "/", changeFrequency: "weekly", priority: 1 },
   { path: "/araclar/uyku-borcu", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/araclar/yasa-gore-uyku", changeFrequency: "monthly", priority: 0.8 },
   { path: "/privacy", changeFrequency: "yearly", priority: 0.3 },
   { path: "/terms", changeFrequency: "yearly", priority: 0.3 },
   { path: "/contact", changeFrequency: "yearly", priority: 0.4 },

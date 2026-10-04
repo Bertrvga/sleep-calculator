@@ -39,6 +39,14 @@ export default function Footer() {
                   Uyku Borcu Hesaplayıcı
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/araclar/yasa-gore-uyku"
+                  className="text-slate-400 transition hover:text-moon-400"
+                >
+                  Yaşa Göre Uyku İhtiyacı
+                </Link>
+              </li>
             </ul>
           </div>
 
