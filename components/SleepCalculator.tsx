@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import {
   Moon,
   Sun,
@@ -50,7 +50,15 @@ type ResultCard = {
   quality: "ideal" | "good" | "ok";
 };
 
-export default function SleepCalculator() {
+type SleepCalculatorProps = {
+  quickBedTimes?: string[];
+  quickWakeTimes?: string[];
+};
+
+export default function SleepCalculator({
+  quickBedTimes = [],
+  quickWakeTimes = [],
+}: SleepCalculatorProps = {}) {
   const [mode, setMode] = useState<Mode>("wake");
   const [wakeTime, setWakeTime] = useState<string>("06:30");
   const [fallAsleepMin, setFallAsleepMin] =
@@ -59,8 +67,10 @@ export default function SleepCalculator() {
   const [computed, setComputed] = useState<{
     mode: Mode;
     reference: string;
+    fromNow?: boolean;
     cards: ResultCard[];
   } | null>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   const cycleOptions = useMemo(() => [3, 4, 5, 6, 7], []);
 
@@ -70,8 +80,8 @@ export default function SleepCalculator() {
     return "ok";
   }
 
-  function calculateFromWakeTime() {
-    const wake = parseTimeToDate(wakeTime);
+  function calculateFromWakeTime(time: string = wakeTime) {
+    const wake = parseTimeToDate(time);
     const cards: ResultCard[] = cycleOptions.map((c) => {
       const totalMin = c * CYCLE_MIN + fallAsleepMin;
       const bed = subMinutes(wake, totalMin);
@@ -82,12 +92,11 @@ export default function SleepCalculator() {
         quality: qualityFor(c),
       };
     });
-    setComputed({ mode: "wake", reference: wakeTime, cards });
+    setComputed({ mode: "wake", reference: time, cards });
   }
 
-  function calculateFromNow() {
-    const now = new Date();
-    const startSleep = addMinutes(now, fallAsleepMin);
+  function calculateFromBedTime(bed: Date, fromNow: boolean) {
+    const startSleep = addMinutes(bed, fallAsleepMin);
     const cards: ResultCard[] = cycleOptions.map((c) => {
       const wake = addMinutes(startSleep, c * CYCLE_MIN);
       return {
@@ -99,15 +108,55 @@ export default function SleepCalculator() {
     });
     setComputed({
       mode: "now",
-      reference: formatTime(now),
+      reference: formatTime(bed),
+      fromNow,
       cards,
     });
   }
 
   function handleCalculate() {
     if (mode === "wake") calculateFromWakeTime();
-    else calculateFromNow();
+    else calculateFromBedTime(new Date(), true);
   }
+
+  function scrollToResults() {
+    requestAnimationFrame(() =>
+      resultsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+    );
+  }
+
+  function handleQuickBed(time: string) {
+    calculateFromBedTime(parseTimeToDate(time), false);
+    scrollToResults();
+  }
+
+  function handleQuickWake(time: string) {
+    setMode("wake");
+    setWakeTime(time);
+    calculateFromWakeTime(time);
+    scrollToResults();
+  }
+
+  const quickGroups = [
+    {
+      key: "bed",
+      title: "Yatış saati seç",
+      icon: <Moon className="h-4 w-4 text-moon-400" />,
+      times: quickBedTimes,
+      onSelect: handleQuickBed,
+      isActive: (t: string) =>
+        computed?.mode === "now" && !computed.fromNow && computed.reference === t,
+    },
+    {
+      key: "wake",
+      title: "Kalkış saati seç",
+      icon: <Sun className="h-4 w-4 text-star-400" />,
+      times: quickWakeTimes,
+      onSelect: handleQuickWake,
+      isActive: (t: string) =>
+        computed?.mode === "wake" && computed.reference === t,
+    },
+  ].filter((g) => g.times.length > 0);
 
   return (
     <section className="py-8 sm:py-12">
@@ -246,9 +295,49 @@ export default function SleepCalculator() {
         </button>
       </div>
 
+      {/* Quick time options */}
+      {quickGroups.length > 0 && (
+        <div className="mt-6 glass-card p-6 sm:p-8">
+          <h2 className="mb-1 flex items-center gap-2 text-lg font-semibold text-white">
+            <Clock className="h-5 w-5 text-moon-400" />
+            Hızlı Saat Seçenekleri
+          </h2>
+          <p className="mb-5 text-xs text-slate-500">
+            Bir saate dokun, sonuçlar anında hesaplansın.
+          </p>
+          <div className="grid gap-5 md:grid-cols-2">
+            {quickGroups.map((group) => (
+              <div key={group.key}>
+                <div className="mb-2 flex items-center gap-2 text-sm font-medium text-slate-300">
+                  {group.icon}
+                  {group.title}
+                </div>
+                <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
+                  {group.times.map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => group.onSelect(t)}
+                      aria-pressed={group.isActive(t)}
+                      className={`rounded-lg border px-2 py-2 font-mono text-sm font-medium transition ${
+                        group.isActive(t)
+                          ? "border-moon-500 bg-moon-600/20 text-white"
+                          : "border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"
+                      }`}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Results */}
       {computed && (
-        <div className="mt-10">
+        <div ref={resultsRef} className="mt-10 scroll-mt-6">
           <div className="mb-6 flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
             <h2 className="text-2xl font-bold text-white">
               {computed.mode === "wake" ? (
@@ -256,9 +345,14 @@ export default function SleepCalculator() {
                   Şu saatte uyanmak için:{" "}
                   <span className="text-moon-400">{computed.reference}</span>
                 </>
-              ) : (
+              ) : computed.fromNow ? (
                 <>
                   Şimdi ({computed.reference}) yatarsan
+                </>
+              ) : (
+                <>
+                  Yatış saati:{" "}
+                  <span className="text-moon-400">{computed.reference}</span>
                 </>
               )}
             </h2>
