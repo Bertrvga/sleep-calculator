@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Brain, ChevronDown, HelpCircle } from "lucide-react";
+import { Brain } from "lucide-react";
 import SleepCalculator from "@/components/SleepCalculator";
 import SleepGuide from "@/components/SleepGuide";
+import FaqSection, { type Faq } from "@/components/FaqSection";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 const QUICK_BED_TIMES = ["22:00", "22:30", "23:00", "23:30", "00:00"];
 const QUICK_WAKE_TIMES = ["06:00", "06:30", "07:00", "07:30", "08:00"];
 
-const FAQS = [
+const FAQS: Faq[] = [
   {
     question: "Uyku döngüsü nedir ve neden önemlidir?",
     answer:
@@ -33,27 +34,9 @@ const FAQS = [
   },
 ];
 
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: FAQS.map((faq) => ({
-    "@type": "Question",
-    name: faq.question,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: faq.answer,
-    },
-  })),
-};
-
 export default function HomePage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
-
       <SleepCalculator
         quickBedTimes={QUICK_BED_TIMES}
         quickWakeTimes={QUICK_WAKE_TIMES}
@@ -90,40 +73,10 @@ export default function HomePage() {
 
       <SleepGuide />
 
-      {/* FAQ */}
-      <section aria-labelledby="faq-title" className="pb-12 sm:pb-16">
-        <div className="mb-8 text-center">
-          <h2
-            id="faq-title"
-            className="bg-gradient-to-b from-white to-slate-400 bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:text-4xl"
-          >
-            Sıkça Sorulan Sorular
-          </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-balance text-slate-400">
-            Uyku döngüleri ve hesaplayıcı hakkında merak edilenler.
-          </p>
-        </div>
-
-        <div className="space-y-3">
-          {FAQS.map((faq) => (
-            <details
-              key={faq.question}
-              className="group rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl transition open:border-moon-500/40 open:bg-card-gradient"
-            >
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-left font-medium text-slate-100 transition hover:text-white [&::-webkit-details-marker]:hidden">
-                <span className="inline-flex items-center gap-3">
-                  <HelpCircle className="h-4 w-4 shrink-0 text-moon-400" />
-                  {faq.question}
-                </span>
-                <ChevronDown className="h-4 w-4 shrink-0 text-slate-400 transition-transform group-open:rotate-180" />
-              </summary>
-              <div className="border-t border-white/10 px-5 py-4 text-sm leading-relaxed text-slate-300">
-                {faq.answer}
-              </div>
-            </details>
-          ))}
-        </div>
-      </section>
+      <FaqSection
+        faqs={FAQS}
+        subtitle="Uyku döngüleri ve hesaplayıcı hakkında merak edilenler."
+      />
     </>
   );
 }

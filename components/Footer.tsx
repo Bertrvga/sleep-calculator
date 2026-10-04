@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <footer className="relative z-10 mt-16 border-t border-white/10 bg-black/30 backdrop-blur-md">
       <div className="mx-auto w-full max-w-6xl px-4 py-10">
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
           <div>
             <div className="flex items-center gap-2 text-white">
               <Moon className="h-5 w-5 text-moon-400" />
@@ -16,6 +16,30 @@ export default function Footer() {
               saniyeler içinde hesaplayın. Daha dinç ve enerjik bir güne
               başlayın.
             </p>
+          </div>
+
+          <div>
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-slate-200">
+              Araçlar
+            </h4>
+            <ul className="mt-3 space-y-2 text-sm">
+              <li>
+                <Link
+                  href="/"
+                  className="text-slate-400 transition hover:text-moon-400"
+                >
+                  Uyku Hesaplayıcı
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/araclar/uyku-borcu"
+                  className="text-slate-400 transition hover:text-moon-400"
+                >
+                  Uyku Borcu Hesaplayıcı
+                </Link>
+              </li>
+            </ul>
           </div>
 
           <div>
