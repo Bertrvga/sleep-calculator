@@ -47,6 +47,14 @@ export default function Footer() {
                   Yaşa Göre Uyku İhtiyacı
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/araclar/power-nap"
+                  className="text-slate-400 transition hover:text-moon-400"
+                >
+                  Güç Uykusu (Power Nap)
+                </Link>
+              </li>
             </ul>
           </div>
 
