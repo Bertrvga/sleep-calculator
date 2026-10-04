@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ArrowRight, Moon } from "lucide-react";
 import SleepDebtCalculator from "@/components/SleepDebtCalculator";
 import FaqSection, { type Faq } from "@/components/FaqSection";
 import { SITE_NAME } from "@/lib/site";
@@ -62,26 +60,6 @@ export default function SleepDebtPage() {
         faqs={FAQS}
         subtitle="Uyku borcu ve telafisi hakkında merak edilenler."
       />
-
-      <section className="pb-12">
-        <Link
-          href="/"
-          className="glass-card bg-card-gradient group flex items-center justify-between gap-4 p-6 transition hover:-translate-y-0.5 hover:shadow-glow"
-        >
-          <div className="flex items-center gap-4">
-            <div className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-moon-600/20 ring-1 ring-moon-500/40">
-              <Moon className="h-5 w-5 text-moon-400" />
-            </div>
-            <div>
-              <div className="font-semibold text-white">Uyku Hesaplayıcı</div>
-              <p className="text-sm text-slate-400">
-                Borcunu kapatmak için ideal yatma saatini hesapla.
-              </p>
-            </div>
-          </div>
-          <ArrowRight className="h-5 w-5 shrink-0 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-white" />
-        </Link>
-      </section>
     </>
   );
 }

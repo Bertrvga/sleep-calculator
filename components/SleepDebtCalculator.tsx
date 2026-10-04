@@ -1,11 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
+  ArrowRight,
   BedDouble,
   CalendarDays,
   CheckCircle2,
   Gauge,
+  AlarmClock,
   HeartPulse,
   ShieldAlert,
   Target,
@@ -13,16 +16,19 @@ import {
 } from "lucide-react";
 
 type InputMode = "average" | "daily";
-type Risk = "none" | "low" | "medium" | "high";
+type Risk = "none" | "low" | "medium" | "high" | "oversleep";
 
 const DAYS = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
 const MAX_EXTRA_MIN_PER_DAY = 60;
+// Sleeping at least this much more than needed per night counts as oversleeping.
+const OVERSLEEP_HOURS_PER_NIGHT = 1;
 
 function formatHours(hours: number) {
   return hours.toLocaleString("tr-TR", { maximumFractionDigits: 1 });
 }
 
-function riskFor(debtHours: number): Risk {
+function riskFor(debtHours: number, surplusHours: number): Risk {
+  if (surplusHours >= OVERSLEEP_HOURS_PER_NIGHT * 7) return "oversleep";
   if (debtHours <= 0) return "none";
   if (debtHours < 5) return "low";
   if (debtHours < 10) return "medium";
@@ -60,6 +66,13 @@ const RISK_INFO: Record<
     card: "border-rose-400/30 bg-rose-500/[0.05]",
     badge: "bg-rose-500/20 text-rose-300 ring-rose-400/40",
     icon: "text-rose-300",
+  },
+  oversleep: {
+    label: "Aşırı Uyku Uyarısı",
+    text: "Gereğinden fazla uyumak sersemlik ve gün içi halsizliğe sebep olabilir. Sürekli fazla uyku ihtiyacı hissediyorsan bunun altında yatan bir neden olabilir.",
+    card: "border-amber-400/30 bg-amber-500/[0.05]",
+    badge: "bg-amber-500/20 text-amber-300 ring-amber-400/40",
+    icon: "text-amber-300",
   },
 };
 
@@ -132,7 +145,8 @@ export default function SleepDebtCalculator() {
     inputMode === "average" ? average * 7 : daily.reduce((a, b) => a + b, 0);
   const totalNeed = need * 7;
   const debt = Math.max(0, +(totalNeed - totalSlept).toFixed(1));
-  const risk = riskFor(debt);
+  const surplus = Math.max(0, +(totalSlept - totalNeed).toFixed(1));
+  const risk = riskFor(debt, surplus);
   const info = RISK_INFO[risk];
   const plan = recoveryPlan(debt);
 
@@ -279,6 +293,15 @@ export default function SleepDebtCalculator() {
               {info.label}
             </div>
             <p className="mt-3 text-sm leading-relaxed text-slate-300">
+              {risk === "oversleep" && (
+                <>
+                  İhtiyacından haftalık{" "}
+                  <strong className="text-white">
+                    {formatHours(surplus)} saat
+                  </strong>{" "}
+                  fazla uyudun.{" "}
+                </>
+              )}
               {info.text}
             </p>
           </article>
@@ -289,7 +312,15 @@ export default function SleepDebtCalculator() {
               <Target className="h-3.5 w-3.5 text-star-400" />
               Telafi önerisi
             </div>
-            {plan ? (
+            {risk === "oversleep" ? (
+              <p className="mt-3 text-sm leading-relaxed text-slate-300">
+                Günde ideal{" "}
+                <strong className="text-white">{formatHours(need)} saat</strong>{" "}
+                uykunu korumaya çalış, fazla uykuyu kademeli olarak azalt. Her
+                gece 15–30 dakika daha erken kalkmak, ritmini bozmadan
+                ihtiyacına yaklaşmanı sağlar.
+              </p>
+            ) : plan ? (
               <>
                 <div className="mt-3 font-mono text-4xl font-bold text-white sm:text-5xl">
                   +{plan.perDay}
@@ -318,6 +349,21 @@ export default function SleepDebtCalculator() {
             )}
           </article>
         </div>
+
+        <Link
+          href="/"
+          className="glass-card bg-card-gradient group mt-6 flex items-center justify-between gap-4 p-5 transition hover:-translate-y-0.5 hover:border-moon-500/40 hover:shadow-glow sm:p-6"
+        >
+          <div className="flex items-center gap-4">
+            <div className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-r from-moon-600 to-star-500 shadow-glow">
+              <AlarmClock className="h-5 w-5 text-white" />
+            </div>
+            <span className="font-semibold text-white sm:text-lg">
+              Bu gece ideal saatte uyanmak için hesaplama yap
+            </span>
+          </div>
+          <ArrowRight className="h-5 w-5 shrink-0 text-moon-400 transition group-hover:translate-x-1 group-hover:text-white" />
+        </Link>
 
         <p className="mt-6 text-xs text-slate-500">
           Telafi planı, günde en fazla {MAX_EXTRA_MIN_PER_DAY} dakika ekstra
