@@ -117,6 +117,7 @@ export default function SleepCalculator({
   function handleCalculate() {
     if (mode === "wake") calculateFromWakeTime();
     else calculateFromBedTime(new Date(), true);
+    scrollToResults();
   }
 
   function scrollToResults() {
@@ -337,7 +338,7 @@ export default function SleepCalculator({
 
       {/* Results */}
       {computed && (
-        <div ref={resultsRef} className="mt-10 scroll-mt-6">
+        <div id="results" ref={resultsRef} className="mt-10 scroll-mt-6">
           <div className="mb-6 flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
             <h2 className="text-2xl font-bold text-white">
               {computed.mode === "wake" ? (
